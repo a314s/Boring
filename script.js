@@ -433,4 +433,37 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     `;
     document.head.appendChild(style);
+
+    // Shrinking header on mobile scroll
+    const header = document.querySelector('header');
+    let lastScrollTop = 0;
+    
+    function handleHeaderOnScroll() {
+        const isMobileView = window.innerWidth <= 768;
+        const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+        
+        if (isMobileView) {
+            if (scrollTop > 50) {
+                // User has scrolled down more than 50px
+                header.classList.add('header-scrolled');
+            } else {
+                // User is at the top of the page
+                header.classList.remove('header-scrolled');
+            }
+        } else {
+            // On desktop, always show the full header
+            header.classList.remove('header-scrolled');
+        }
+        
+        lastScrollTop = scrollTop;
+    }
+    
+    // Add scroll event listener
+    window.addEventListener('scroll', handleHeaderOnScroll);
+    
+    // Also check on resize to handle device orientation changes
+    window.addEventListener('resize', handleHeaderOnScroll);
+    
+    // Initial check
+    handleHeaderOnScroll();
 });

@@ -93,6 +93,16 @@ header {
     left: 0;
     width: 100%;
     z-index: 1000;
+    transition: padding 0.3s ease, box-shadow 0.3s ease;
+}
+
+.header-scrolled {
+    padding: 0.8rem 5%;
+}
+
+.header-scrolled .logo {
+    height: 45px;
+    transition: height 0.3s ease;
 }
 
 .logo-container {
@@ -101,7 +111,7 @@ header {
 }
 
 .logo {
-    height: 65px; /* Increased from 50px to 65px (30% bigger) */
+    height: 65px;
 }
 
 nav ul {
@@ -207,20 +217,20 @@ nav ul li a:hover::after {
 /* Text Slider Styles */
 .text-slider-container {
     position: absolute;
-    width: 120%; /* 20% wider */
-    height: 200%; /* Increased from 150% to 200% to make it 50% taller */
+    width: 120%;
+    height: 200%;
     display: flex;
     justify-content: center;
     align-items: center;
     z-index: 3;
-    pointer-events: none; /* Allow clicks to pass through to elements below */
-    perspective: 1500px; /* Enhanced perspective for 3D effect */
+    pointer-events: none;
+    perspective: 1500px;
 }
 
 .text-slider {
     position: relative;
     width: 90%;
-    height: 350px; /* Increased from 250px to 350px */
+    height: 350px;
     max-width: 1000px;
     transform-style: preserve-3d;
 }
@@ -240,11 +250,11 @@ nav ul li a:hover::after {
     padding: 1.5rem;
     display: flex;
     flex-direction: column;
-    align-items: center; /* Changed from flex-start to center */
-    justify-content: center; /* Changed from flex-start to center */
+    align-items: center;
+    justify-content: center;
     overflow: hidden;
     pointer-events: auto;
-    transform-origin: center center -175px; /* Adjusted from -125px to -175px to account for increased height */
+    transform-origin: center center -175px;
     transform: rotateX(90deg);
     transition: transform 0.8s cubic-bezier(0.4, 0.0, 0.2, 1);
 }
@@ -263,12 +273,12 @@ nav ul li a:hover::after {
 .slide h4 {
     font-weight: 700;
     font-size: 1.4rem;
-    margin-bottom: 1.5rem; /* Increased from 1rem to 1.5rem for more separation */
+    margin-bottom: 1.5rem;
     color: var(--accent-color);
     width: 100%;
     text-align: center;
-    position: relative; /* Added for the decorative line */
-    padding-bottom: 12px; /* Added space for the decorative line */
+    position: relative;
+    padding-bottom: 12px;
 }
 
 .slide h4::after {
@@ -286,7 +296,7 @@ nav ul li a:hover::after {
     list-style-type: none;
     padding: 0;
     margin: 0;
-    width: 90%; /* Reduced from 100% to 90% for better centering */
+    width: 90%;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
@@ -302,7 +312,7 @@ nav ul li a:hover::after {
     position: relative;
     display: flex;
     align-items: flex-start;
-    text-align: left; /* Ensure text alignment is left for readability */
+    text-align: left;
 }
 
 .slide p {
@@ -329,17 +339,19 @@ nav ul li a:hover::after {
 
 @media (max-width: 768px) {
     .text-slider-container {
-        perspective: 1000px; /* Adjusted perspective for medium screens */
+        perspective: 1000px;
+        width: calc(100% - 20px); /* Added 10px gap on each side */
+        margin: 0 auto; /* Center the container */
     }
     
     .text-slider {
         width: 95%;
-        height: 320px; /* Increased from 220px to 320px */
+        height: 320px;
     }
     
     .slide {
         padding: 25px;
-        transform-origin: center center -160px; /* Adjusted from -110px to -160px */
+        transform-origin: center center -160px;
     }
     
     .slide-list li {
@@ -355,18 +367,19 @@ nav ul li a:hover::after {
 
 @media (max-width: 480px) {
     .text-slider-container {
-        perspective: 800px; /* Reduced perspective for mobile */
+        perspective: 800px;
+        width: calc(100% - 30px); /* Added 15px gap on each side for smaller screens */
     }
     
     .text-slider {
         width: 95%;
-        height: 280px; /* Increased from 180px to 280px */
+        height: 280px;
     }
     
     .slide {
         padding: 20px 15px;
-        transform-origin: center center -140px; /* Adjusted from -90px to -140px */
-        transition: transform 0.6s cubic-bezier(0.4, 0.0, 0.2, 1); /* Faster animation on mobile */
+        transform-origin: center center -140px;
+        transition: transform 0.6s cubic-bezier(0.4, 0.0, 0.2, 1);
     }
     
     .slide-list li {
@@ -523,7 +536,7 @@ nav ul li a:hover::after {
 .about-slider-container {
     position: relative;
     width: 100%;
-    height: 375px; /* Increased from 250px to 375px (50% taller) */
+    height: 375px;
     margin-top: 2rem;
     overflow: hidden;
 }
@@ -547,11 +560,11 @@ nav ul li a:hover::after {
     padding: 30px 40px;
     opacity: 0;
     transform: translateX(100%);
-    transition: transform 2s cubic-bezier(0.19, 1, 0.22, 1), opacity 2s ease; /* Increased from 1.5s to 2s */
+    transition: transform 2s cubic-bezier(0.19, 1, 0.22, 1), opacity 2s ease;
     display: flex;
     flex-direction: column;
     justify-content: center;
-    align-items: center; /* Added to center content horizontally */
+    align-items: center;
     overflow: hidden;
 }
 
@@ -578,10 +591,10 @@ nav ul li a:hover::after {
 
 .about-slide h3 {
     font-size: 1.8rem;
-    margin-bottom: 2rem; /* Increased from 1rem to 2rem for more separation */
+    margin-bottom: 2rem;
     color: var(--accent-color);
     position: relative;
-    padding-bottom: 15px; /* Increased from 10px to 15px for more space */
+    padding-bottom: 15px;
     text-align: center;
     width: 100%;
 }
@@ -592,7 +605,7 @@ nav ul li a:hover::after {
     bottom: 0;
     left: 50%;
     transform: translateX(-50%);
-    width: 80px; /* Increased from 60px to 80px for better visibility */
+    width: 80px;
     height: 3px;
     background: var(--accent-color);
 }
@@ -640,7 +653,7 @@ nav ul li a:hover::after {
 /* Responsive adjustments for about slider */
 @media (max-width: 768px) {
     .about-slider-container {
-        height: 400px; /* Slightly taller on medium screens */
+        height: 400px;
     }
     
     .about-slide {
@@ -655,7 +668,7 @@ nav ul li a:hover::after {
 
 @media (max-width: 480px) {
     .about-slider-container {
-        height: 450px; /* Even taller on mobile for better readability */
+        height: 450px;
     }
     
     .about-slide {
@@ -798,7 +811,7 @@ footer {
 }
 
 .footer-logo-img {
-    max-width: 150px; /* Increased from 100px to 150px (50% bigger) */
+    max-width: 150px;
 }
 
 .footer-links, .footer-social {
