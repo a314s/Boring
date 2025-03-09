@@ -144,6 +144,59 @@ nav ul li a:hover::after {
     width: 100%;
 }
 
+/* Mobile header adjustments */
+@media (max-width: 768px) {
+    header {
+        padding: 1rem 3%;
+    }
+    
+    .header-scrolled {
+        padding: 0.5rem 3%;
+    }
+    
+    .logo-container {
+        flex: 0 0 auto;
+    }
+    
+    nav {
+        flex: 1;
+        display: flex;
+        justify-content: flex-end;
+    }
+    
+    nav ul {
+        justify-content: space-between;
+        width: 100%;
+        max-width: 300px;
+    }
+    
+    nav ul li {
+        margin-left: 0;
+    }
+}
+
+@media (max-width: 480px) {
+    header {
+        padding: 0.8rem 3%;
+    }
+    
+    .header-scrolled {
+        padding: 0.4rem 3%;
+    }
+    
+    .logo {
+        height: 50px;
+    }
+    
+    .header-scrolled .logo {
+        height: 40px;
+    }
+    
+    nav ul li a {
+        font-size: 0.9rem;
+    }
+}
+
 /* Hero Section */
 .hero {
     display: flex;
@@ -340,7 +393,7 @@ nav ul li a:hover::after {
 @media (max-width: 768px) {
     .text-slider-container {
         perspective: 1000px;
-        width: calc(100% - 20px); /* Added 10px gap on each side */
+        width: calc(100% - 10px); /* Reduced from 20px to 10px (half the gap) */
         margin: 0 auto; /* Center the container */
     }
     
@@ -368,7 +421,7 @@ nav ul li a:hover::after {
 @media (max-width: 480px) {
     .text-slider-container {
         perspective: 800px;
-        width: calc(100% - 30px); /* Added 15px gap on each side for smaller screens */
+        width: calc(100% - 15px); /* Reduced from 30px to 15px (half the gap) */
     }
     
     .text-slider {
