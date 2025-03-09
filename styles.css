@@ -161,6 +161,7 @@ nav ul li a:hover::after {
     max-width: 600px;
     position: relative;
     z-index: 2;
+    flex: 1;
 }
 
 .hero h1 {
@@ -173,6 +174,96 @@ nav ul li a:hover::after {
     font-size: 1.25rem;
     margin-bottom: 2rem;
     opacity: 0.9;
+}
+
+/* Hero Animation Container */
+.hero-animation-container {
+    position: relative;
+    width: 40%;
+    min-height: 300px;
+    z-index: 2;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.hero-animation {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 2;
+}
+
+.animated-icon {
+    max-width: 300px;
+    filter: drop-shadow(0 0 20px rgba(0, 170, 255, 0.5));
+}
+
+/* Text Slider Styles */
+.text-slider-container {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 3;
+    pointer-events: none; /* Allow clicks to pass through to elements below */
+}
+
+.text-slider {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.slide {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    max-width: 100%;
+    padding: 30px;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-radius: 15px;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+    opacity: 0;
+    transform: translateX(100%);
+    transition: transform 1.5s ease, opacity 1.5s ease;
+    pointer-events: auto; /* Make the slide clickable */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.slide.active {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+.slide p {
+    font-size: 1.1rem;
+    line-height: 1.6;
+    color: white;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+    margin: 0;
+    font-weight: 300;
+    letter-spacing: 0.3px;
+    max-width: 80%;
+    text-align: center;
+}
+
+.final-slide p {
+    font-weight: 500;
+    font-size: 1.2rem;
 }
 
 .language-selector {
@@ -193,19 +284,6 @@ nav ul li a:hover::after {
 
 .lang-btn:hover, .lang-btn.active {
     background: rgba(255, 255, 255, 0.4);
-}
-
-.hero-animation {
-    position: relative;
-    z-index: 2;
-    width: 40%;
-    display: flex;
-    justify-content: center;
-}
-
-.animated-icon {
-    max-width: 300px;
-    filter: drop-shadow(0 0 20px rgba(0, 170, 255, 0.5));
 }
 
 /* Services Section */
@@ -510,11 +588,24 @@ footer {
     }
     
     .hero-content {
-        margin-bottom: 3rem;
+        margin-bottom: 2rem;
+        width: 100%;
+    }
+    
+    .hero-animation-container {
+        width: 100%;
+        min-height: 350px;
+        margin-top: 20px;
+    }
+    
+    .slide {
+        width: 100%;
+        max-width: 100%;
+        padding: 25px;
     }
     
     .hero-animation {
-        width: 80%;
+        width: 100%;
     }
     
     .process-steps {
@@ -551,6 +642,19 @@ footer {
         font-size: 2.5rem;
     }
     
+    .hero-animation-container {
+        min-height: 300px;
+    }
+    
+    .slide {
+        width: 100%;
+        padding: 20px;
+    }
+    
+    .slide p {
+        font-size: 1rem;
+    }
+    
     .section-title {
         font-size: 2rem;
     }
@@ -567,6 +671,15 @@ footer {
     
     .hero p {
         font-size: 1rem;
+    }
+    
+    .hero-animation-container {
+        min-height: 250px;
+    }
+    
+    .slide {
+        width: 100%;
+        padding: 15px;
     }
     
     .section-title {

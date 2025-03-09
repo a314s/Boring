@@ -1,4 +1,56 @@
 document.addEventListener('DOMContentLoaded', function() {
+    // Text slider functionality
+    const slides = document.querySelectorAll('.slide');
+    let currentSlide = 0;
+    const totalSlides = slides.length;
+    let sliderInterval;
+    let pauseOnLastSlide = false;
+    
+    function startSlider() {
+        sliderInterval = setInterval(() => {
+            // If we're on the last slide and it's set to pause
+            if (currentSlide === totalSlides - 1 && pauseOnLastSlide) {
+                // Don't advance, just keep showing the last slide
+                return;
+            }
+            
+            // Remove active class from current slide
+            slides[currentSlide].classList.remove('active');
+            
+            // Move to next slide or back to first
+            currentSlide = (currentSlide + 1) % totalSlides;
+            
+            // Add active class to new current slide
+            slides[currentSlide].classList.add('active');
+            
+            // If we've reached the last slide (Why choose NaviTechAid)
+            if (currentSlide === totalSlides - 1) {
+                // Pause on this slide for longer (10 seconds)
+                pauseOnLastSlide = true;
+                
+                // After 10 seconds, allow the slider to continue
+                setTimeout(() => {
+                    pauseOnLastSlide = false;
+                }, 10000);
+            }
+        }, 8000); // Change slide every 8 seconds
+    }
+    
+    // Start the slider
+    startSlider();
+    
+    // Pause slider on hover
+    const sliderContainer = document.querySelector('.text-slider-container');
+    if (sliderContainer) {
+        sliderContainer.addEventListener('mouseenter', () => {
+            clearInterval(sliderInterval);
+        });
+        
+        sliderContainer.addEventListener('mouseleave', () => {
+            startSlider();
+        });
+    }
+
     // Language translations
     const translations = {
         en: {
