@@ -322,10 +322,10 @@ document.addEventListener('DOMContentLoaded', function() {
         
         // Remove any existing animation classes first
         aboutSlides.forEach(slide => {
-            slide.classList.remove('exit-reverse', 'active-reverse');
+            slide.classList.remove('exit', 'exit-reverse', 'active-reverse');
         });
         
-        // Add exit class to the previous slide
+        // Add exit class to the previous slide - always exit to the left
         aboutSlides[previousAboutSlide].classList.remove('active');
         aboutSlides[previousAboutSlide].classList.add('exit');
         

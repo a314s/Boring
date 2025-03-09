@@ -288,7 +288,7 @@ nav ul li a:hover::after {
 
 /* Hero animation container (right side) */
 .hero-animation-container {
-    width: 26%;
+    width: 31.2%;  /* Increased from 26% to 31.2% (20% wider) */
     margin-right: 6%;
     padding-top: 20px;
     padding-bottom: 20px;
@@ -748,11 +748,13 @@ nav ul li a:hover::after {
 .about-slide.exit {
     opacity: 0;
     transform: translateX(-100%);
+    transition: transform 2s cubic-bezier(0.19, 1, 0.22, 1), opacity 2s ease;
 }
 
 .about-slide.exit-reverse {
-    transform: translateX(-100%);
+    transform: translateX(100%);
     opacity: 0;
+    transition: transform 2s cubic-bezier(0.19, 1, 0.22, 1), opacity 2s ease;
 }
 
 .about-slide.active {
