@@ -8,6 +8,7 @@ document.addEventListener('DOMContentLoaded', function() {
     let sliderInterval;
     let pauseOnLastSlide = false;
     let isAnimating = false;
+    let isHeroSectionVisible = false;
     
     // Determine if we're on a mobile device
     const isMobile = window.innerWidth <= 480;
@@ -27,9 +28,14 @@ document.addEventListener('DOMContentLoaded', function() {
     slides[currentSlide].style.visibility = 'visible';
     
     function startSlider() {
+        // Clear any existing interval first
+        if (sliderInterval) {
+            clearInterval(sliderInterval);
+        }
+        
         sliderInterval = setInterval(() => {
-            // Don't start a new animation if one is already in progress
-            if (isAnimating) return;
+            // Don't start a new animation if one is already in progress or if section is not visible
+            if (isAnimating || !isHeroSectionVisible) return;
             
             // If we're on the last slide and it's set to pause
             if (currentSlide === totalSlides - 1 && pauseOnLastSlide) {
@@ -73,51 +79,30 @@ document.addEventListener('DOMContentLoaded', function() {
                     }, 10000);
                 }
             }, animationDuration); // Match this to the CSS transition duration
-        }, 12000); // Changed from 8000 to 12000 - display each slide for 12 seconds to allow more reading time
+        }, 6000); // Changed from 12000 to 6000 - display each slide for 6 seconds
     }
     
-    // Start the slider
-    startSlider();
-    
-    // Pause slider on hover (only on desktop)
-    const sliderContainer = document.querySelector('.text-slider-container');
-    if (sliderContainer && !isMobile) {
-        sliderContainer.addEventListener('mouseenter', () => {
-            clearInterval(sliderInterval);
-        });
-        
-        sliderContainer.addEventListener('mouseleave', () => {
-            startSlider();
-        });
-    }
-    
-    // Handle window resize
-    window.addEventListener('resize', () => {
-        const wasIsMobile = isMobile;
-        const newIsMobile = window.innerWidth <= 480;
-        
-        // Only update if the device type changed
-        if (wasIsMobile !== newIsMobile) {
-            // Clear existing interval
-            clearInterval(sliderInterval);
-            
-            // Restart with new timing
-            startSlider();
-        }
-    });
-
     // About section slider functionality
     const aboutSlides = document.querySelectorAll('.about-slide');
     let currentAboutSlide = 0;
     let previousAboutSlide = 0;
     const totalAboutSlides = aboutSlides.length;
     let aboutSliderInterval;
+    let isAboutSectionVisible = false;
     
     // Set initial about slide
     aboutSlides[currentAboutSlide].classList.add('active');
     
     function startAboutSlider() {
+        // Clear any existing interval first
+        if (aboutSliderInterval) {
+            clearInterval(aboutSliderInterval);
+        }
+        
         aboutSliderInterval = setInterval(() => {
+            // Only proceed if the about section is visible
+            if (!isAboutSectionVisible) return;
+            
             // Store previous slide index
             previousAboutSlide = currentAboutSlide;
             
@@ -135,11 +120,58 @@ document.addEventListener('DOMContentLoaded', function() {
             setTimeout(() => {
                 aboutSlides[previousAboutSlide].classList.remove('exit');
             }, 2000); // Increased from 1500ms to 2000ms to match the new CSS transition time
-        }, 12000); // Increased from 9000ms to 12000ms to give more time to read the content
+        }, 6000); // Changed from 12000 to 6000 - display each slide for 6 seconds
     }
     
-    // Start the about slider
-    startAboutSlider();
+    // Set up Intersection Observer for hero section
+    const heroSection = document.querySelector('.hero');
+    if (heroSection) {
+        const heroObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                isHeroSectionVisible = entry.isIntersecting;
+                
+                if (isHeroSectionVisible) {
+                    startSlider();
+                } else {
+                    clearInterval(sliderInterval);
+                }
+            });
+        }, { threshold: 0.3 }); // Trigger when at least 30% of the section is visible
+        
+        heroObserver.observe(heroSection);
+    }
+    
+    // Set up Intersection Observer for about section
+    const aboutSection = document.querySelector('.about');
+    if (aboutSection) {
+        const aboutObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                isAboutSectionVisible = entry.isIntersecting;
+                
+                if (isAboutSectionVisible) {
+                    startAboutSlider();
+                } else {
+                    clearInterval(aboutSliderInterval);
+                }
+            });
+        }, { threshold: 0.3 }); // Trigger when at least 30% of the section is visible
+        
+        aboutObserver.observe(aboutSection);
+    }
+    
+    // Pause slider on hover (only on desktop)
+    const sliderContainer = document.querySelector('.text-slider-container');
+    if (sliderContainer && !isMobile) {
+        sliderContainer.addEventListener('mouseenter', () => {
+            clearInterval(sliderInterval);
+        });
+        
+        sliderContainer.addEventListener('mouseleave', () => {
+            if (isHeroSectionVisible) {
+                startSlider();
+            }
+        });
+    }
     
     // Pause about slider on hover
     const aboutSliderContainer = document.querySelector('.about-slider-container');
@@ -149,10 +181,12 @@ document.addEventListener('DOMContentLoaded', function() {
         });
         
         aboutSliderContainer.addEventListener('mouseleave', () => {
-            startAboutSlider();
+            if (isAboutSectionVisible) {
+                startAboutSlider();
+            }
         });
     }
-
+    
     // Language translations
     const translations = {
         en: {

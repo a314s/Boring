@@ -101,7 +101,7 @@ header {
 }
 
 .logo {
-    height: 50px;
+    height: 65px; /* Increased from 50px to 65px (30% bigger) */
 }
 
 nav ul {
@@ -256,17 +256,30 @@ nav ul li a:hover::after {
     left: 0;
     width: 100%;
     height: 100%;
-    background: linear-gradient(45deg, transparent 0%, transparent 40%, rgba(0, 170, 255, 0.1) 100%);
+    background-image: linear-gradient(45deg, transparent 0%, transparent 40%, rgba(0, 170, 255, 0.1) 100%);
     z-index: -1;
 }
 
 .slide h4 {
     font-weight: 700;
     font-size: 1.4rem;
-    margin-bottom: 1rem; /* Increased from 0.5rem to 1rem */
-    color: var(--accent-color); /* Changed from #2c3e50 to accent color for better visibility */
+    margin-bottom: 1.5rem; /* Increased from 1rem to 1.5rem for more separation */
+    color: var(--accent-color);
     width: 100%;
     text-align: center;
+    position: relative; /* Added for the decorative line */
+    padding-bottom: 12px; /* Added space for the decorative line */
+}
+
+.slide h4::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 50px;
+    height: 2px;
+    background: var(--accent-color);
 }
 
 .slide-list {
@@ -565,11 +578,11 @@ nav ul li a:hover::after {
 
 .about-slide h3 {
     font-size: 1.8rem;
-    margin-bottom: 1rem;
+    margin-bottom: 2rem; /* Increased from 1rem to 2rem for more separation */
     color: var(--accent-color);
     position: relative;
-    padding-bottom: 10px;
-    text-align: center; /* Added to center the heading */
+    padding-bottom: 15px; /* Increased from 10px to 15px for more space */
+    text-align: center;
     width: 100%;
 }
 
@@ -577,9 +590,9 @@ nav ul li a:hover::after {
     content: '';
     position: absolute;
     bottom: 0;
-    left: 50%; /* Changed from 0 to 50% */
-    transform: translateX(-50%); /* Added to center the line */
-    width: 60px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80px; /* Increased from 60px to 80px for better visibility */
     height: 3px;
     background: var(--accent-color);
 }
@@ -785,7 +798,7 @@ footer {
 }
 
 .footer-logo-img {
-    max-width: 100px;
+    max-width: 150px; /* Increased from 100px to 150px (50% bigger) */
 }
 
 .footer-links, .footer-social {
