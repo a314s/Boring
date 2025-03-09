@@ -223,7 +223,6 @@ nav ul li a:hover::after {
     height: 250px;
     max-width: 1000px;
     transform-style: preserve-3d;
-    transition: transform 0.8s cubic-bezier(0.4, 0.0, 0.2, 1);
 }
 
 .slide {
@@ -287,6 +286,57 @@ nav ul li a:hover::after {
     font-size: 1.4rem;
 }
 
+@media (max-width: 768px) {
+    .text-slider-container {
+        perspective: 1000px; /* Adjusted perspective for medium screens */
+    }
+    
+    .text-slider {
+        width: 95%;
+        height: 220px;
+    }
+    
+    .slide {
+        padding: 30px;
+        transform-origin: center center -110px; /* Adjusted for medium screens */
+    }
+    
+    .slide p {
+        font-size: 1.1rem;
+        max-width: 95%;
+    }
+    
+    .final-slide p {
+        font-size: 1.2rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .text-slider-container {
+        perspective: 800px; /* Reduced perspective for mobile */
+    }
+    
+    .text-slider {
+        width: 95%;
+        height: 180px;
+    }
+    
+    .slide {
+        padding: 20px 15px;
+        transform-origin: center center -90px; /* Adjusted for mobile screens */
+        transition: transform 0.6s cubic-bezier(0.4, 0.0, 0.2, 1); /* Faster animation on mobile */
+    }
+    
+    .slide p {
+        font-size: 1rem;
+        max-width: 100%;
+    }
+    
+    .final-slide p {
+        font-size: 1.1rem;
+    }
+}
+
 .language-selector {
     display: flex;
     gap: 10px;
@@ -305,44 +355,6 @@ nav ul li a:hover::after {
 
 .lang-btn:hover, .lang-btn.active {
     background: rgba(255, 255, 255, 0.4);
-}
-
-@media (max-width: 768px) {
-    .text-slider {
-        width: 95%;
-        height: 220px;
-    }
-    
-    .slide {
-        padding: 30px;
-    }
-    
-    .slide p {
-        font-size: 1.1rem;
-        max-width: 95%;
-    }
-    
-    .final-slide p {
-        font-size: 1.2rem;
-    }
-}
-
-@media (max-width: 480px) {
-    .text-slider {
-        height: 200px;
-    }
-    
-    .slide {
-        padding: 20px;
-    }
-    
-    .slide p {
-        font-size: 1rem;
-    }
-    
-    .final-slide p {
-        font-size: 1.1rem;
-    }
 }
 
 /* Services Section */

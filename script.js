@@ -9,6 +9,12 @@ document.addEventListener('DOMContentLoaded', function() {
     let pauseOnLastSlide = false;
     let isAnimating = false;
     
+    // Determine if we're on a mobile device
+    const isMobile = window.innerWidth <= 480;
+    
+    // Animation duration based on device
+    const animationDuration = isMobile ? 600 : 800; // Faster on mobile
+    
     // Hide all slides initially except the first one
     slides.forEach((slide, index) => {
         if (index !== 0) {
@@ -66,16 +72,16 @@ document.addEventListener('DOMContentLoaded', function() {
                         pauseOnLastSlide = false;
                     }, 10000);
                 }
-            }, 800); // Match this to the CSS transition duration
+            }, animationDuration); // Match this to the CSS transition duration
         }, 8000); // Change slide every 8 seconds
     }
     
     // Start the slider
     startSlider();
     
-    // Pause slider on hover
+    // Pause slider on hover (only on desktop)
     const sliderContainer = document.querySelector('.text-slider-container');
-    if (sliderContainer) {
+    if (sliderContainer && !isMobile) {
         sliderContainer.addEventListener('mouseenter', () => {
             clearInterval(sliderInterval);
         });
@@ -84,6 +90,21 @@ document.addEventListener('DOMContentLoaded', function() {
             startSlider();
         });
     }
+    
+    // Handle window resize
+    window.addEventListener('resize', () => {
+        const wasIsMobile = isMobile;
+        const newIsMobile = window.innerWidth <= 480;
+        
+        // Only update if the device type changed
+        if (wasIsMobile !== newIsMobile) {
+            // Clear existing interval
+            clearInterval(sliderInterval);
+            
+            // Restart with new timing
+            startSlider();
+        }
+    });
 
     // About section slider functionality
     const aboutSlides = document.querySelectorAll('.about-slide');
