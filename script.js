@@ -73,7 +73,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     }, 10000);
                 }
             }, animationDuration); // Match this to the CSS transition duration
-        }, 8000); // Change slide every 8 seconds
+        }, 12000); // Changed from 8000 to 12000 - display each slide for 12 seconds to allow more reading time
     }
     
     // Start the slider
@@ -134,8 +134,8 @@ document.addEventListener('DOMContentLoaded', function() {
             // Remove exit class after animation completes
             setTimeout(() => {
                 aboutSlides[previousAboutSlide].classList.remove('exit');
-            }, 1500);
-        }, 9000); // Change slide every 9 seconds (slightly different timing from hero slider)
+            }, 2000); // Increased from 1500ms to 2000ms to match the new CSS transition time
+        }, 12000); // Increased from 9000ms to 12000ms to give more time to read the content
     }
     
     // Start the about slider
@@ -262,8 +262,10 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    // Form submission handling
-    const contactForm = document.querySelector('.contact-form');
+    // Contact form submission handler
+    const contactForm = document.getElementById('contactForm');
+    const formStatus = document.getElementById('form-status');
+    
     if (contactForm) {
         contactForm.addEventListener('submit', function(e) {
             e.preventDefault();
@@ -273,15 +275,89 @@ document.addEventListener('DOMContentLoaded', function() {
             const email = document.getElementById('email').value;
             const message = document.getElementById('message').value;
             
-            // Simple validation
-            if (!name || !email || !message) {
-                alert('Please fill in all fields');
-                return;
+            // Update the reply-to field with the user's email
+            const replyToField = contactForm.querySelector('input[name="_replyto"]');
+            if (replyToField) {
+                replyToField.value = email;
             }
             
-            // Simulate form submission
-            alert('Thank you for your message! We will get back to you soon.');
-            this.reset();
+            // Show sending status
+            formStatus.textContent = "Sending message...";
+            formStatus.style.color = "#0066cc";
+            
+            // Function to create mailto fallback
+            const openEmailClient = () => {
+                // Get the email address from the contact info
+                const recipientEmail = 'Avi@navitechaid.com';
+                
+                // Create email subject and body
+                const subject = `NaviTechAid Contact Form: ${name}`;
+                const body = `Name: ${name}%0D%0AEmail: ${email}%0D%0A%0D%0AMessage:%0D%0A${message}`;
+                
+                // Create mailto link
+                const mailtoLink = `mailto:${recipientEmail}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+                
+                // Open email client
+                window.location.href = mailtoLink;
+            };
+            
+            // Set a timeout for the API call - if it takes longer than 10 seconds, offer the fallback
+            let timeoutId = setTimeout(() => {
+                formStatus.innerHTML = "The server is taking too long to respond. <a href='#' id='email-fallback'>Click here</a> to send via email client instead.";
+                formStatus.style.color = "#ff9800";
+                
+                // Add event listener to the fallback link
+                document.getElementById('email-fallback').addEventListener('click', function(e) {
+                    e.preventDefault();
+                    openEmailClient();
+                });
+            }, 10000); // 10 second timeout
+            
+            // Send the form using fetch API
+            fetch(contactForm.action, {
+                method: contactForm.method,
+                body: new FormData(contactForm),
+                headers: {
+                    'Accept': 'application/json'
+                }
+            })
+            .then(response => {
+                // Clear the timeout since we got a response
+                clearTimeout(timeoutId);
+                
+                if (response.ok) {
+                    return response.json();
+                }
+                throw new Error('Network response was not ok.');
+            })
+            .then(data => {
+                // Show success message
+                formStatus.textContent = "Thank you! Your message has been sent.";
+                formStatus.style.color = "#4CAF50";
+                
+                // Reset form
+                contactForm.reset();
+                
+                // Clear status message after 5 seconds
+                setTimeout(() => {
+                    formStatus.textContent = "";
+                }, 5000);
+            })
+            .catch(error => {
+                // Clear the timeout since we got an error response
+                clearTimeout(timeoutId);
+                
+                // Show error message with fallback option
+                formStatus.innerHTML = "There was a problem sending your message. <a href='#' id='email-fallback'>Click here</a> to open your email client instead.";
+                formStatus.style.color = "#f44336";
+                console.error('Error:', error);
+                
+                // Add event listener to the fallback link
+                document.getElementById('email-fallback').addEventListener('click', function(e) {
+                    e.preventDefault();
+                    openEmailClient();
+                });
+            });
         });
     }
 

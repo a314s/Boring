@@ -207,8 +207,8 @@ nav ul li a:hover::after {
 /* Text Slider Styles */
 .text-slider-container {
     position: absolute;
-    width: 100%;
-    height: 100%;
+    width: 120%; /* 20% wider */
+    height: 200%; /* Increased from 150% to 200% to make it 50% taller */
     display: flex;
     justify-content: center;
     align-items: center;
@@ -220,7 +220,7 @@ nav ul li a:hover::after {
 .text-slider {
     position: relative;
     width: 90%;
-    height: 250px;
+    height: 350px; /* Increased from 250px to 350px */
     max-width: 1000px;
     transform-style: preserve-3d;
 }
@@ -237,13 +237,14 @@ nav ul li a:hover::after {
     border-radius: 8px;
     border-left: 3px solid var(--accent-color);
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
-    padding: 40px;
+    padding: 1.5rem;
     display: flex;
-    align-items: center;
-    justify-content: center;
+    flex-direction: column;
+    align-items: center; /* Changed from flex-start to center */
+    justify-content: center; /* Changed from flex-start to center */
     overflow: hidden;
     pointer-events: auto;
-    transform-origin: center center -125px; /* Position the cube faces */
+    transform-origin: center center -175px; /* Adjusted from -125px to -175px to account for increased height */
     transform: rotateX(90deg);
     transition: transform 0.8s cubic-bezier(0.4, 0.0, 0.2, 1);
 }
@@ -259,14 +260,36 @@ nav ul li a:hover::after {
     z-index: -1;
 }
 
-.slide.active {
-    transform: rotateX(0deg);
-    z-index: 2;
+.slide h4 {
+    font-weight: 700;
+    font-size: 1.4rem;
+    margin-bottom: 1rem; /* Increased from 0.5rem to 1rem */
+    color: var(--accent-color); /* Changed from #2c3e50 to accent color for better visibility */
+    width: 100%;
+    text-align: center;
 }
 
-.slide.prev {
-    transform: rotateX(-90deg);
-    z-index: 1;
+.slide-list {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    width: 90%; /* Reduced from 100% to 90% for better centering */
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.slide-list li {
+    font-size: 1.1rem;
+    line-height: 1.5;
+    color: white;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+    margin-bottom: 0.7rem;
+    padding-left: 0.5rem;
+    position: relative;
+    display: flex;
+    align-items: flex-start;
+    text-align: left; /* Ensure text alignment is left for readability */
 }
 
 .slide p {
@@ -281,9 +304,14 @@ nav ul li a:hover::after {
     text-align: center;
 }
 
-.final-slide p {
-    font-weight: 500;
-    font-size: 1.4rem;
+.slide.active {
+    transform: rotateX(0deg);
+    z-index: 2;
+}
+
+.slide.prev {
+    transform: rotateX(-90deg);
+    z-index: 1;
 }
 
 @media (max-width: 768px) {
@@ -293,21 +321,22 @@ nav ul li a:hover::after {
     
     .text-slider {
         width: 95%;
-        height: 220px;
+        height: 320px; /* Increased from 220px to 320px */
     }
     
     .slide {
-        padding: 30px;
-        transform-origin: center center -110px; /* Adjusted for medium screens */
+        padding: 25px;
+        transform-origin: center center -160px; /* Adjusted from -110px to -160px */
     }
     
-    .slide p {
-        font-size: 1.1rem;
-        max-width: 95%;
+    .slide-list li {
+        font-size: 1rem;
+        margin-bottom: 0.5rem;
     }
     
-    .final-slide p {
-        font-size: 1.2rem;
+    .slide h4 {
+        font-size: 1.3rem;
+        margin-bottom: 0.8rem;
     }
 }
 
@@ -318,22 +347,23 @@ nav ul li a:hover::after {
     
     .text-slider {
         width: 95%;
-        height: 180px;
+        height: 280px; /* Increased from 180px to 280px */
     }
     
     .slide {
         padding: 20px 15px;
-        transform-origin: center center -90px; /* Adjusted for mobile screens */
+        transform-origin: center center -140px; /* Adjusted from -90px to -140px */
         transition: transform 0.6s cubic-bezier(0.4, 0.0, 0.2, 1); /* Faster animation on mobile */
     }
     
-    .slide p {
-        font-size: 1rem;
-        max-width: 100%;
+    .slide-list li {
+        font-size: 0.9rem;
+        margin-bottom: 0.4rem;
     }
     
-    .final-slide p {
+    .slide h4 {
         font-size: 1.1rem;
+        margin-bottom: 0.7rem;
     }
 }
 
@@ -480,7 +510,7 @@ nav ul li a:hover::after {
 .about-slider-container {
     position: relative;
     width: 100%;
-    height: 250px;
+    height: 375px; /* Increased from 250px to 375px (50% taller) */
     margin-top: 2rem;
     overflow: hidden;
 }
@@ -504,10 +534,11 @@ nav ul li a:hover::after {
     padding: 30px 40px;
     opacity: 0;
     transform: translateX(100%);
-    transition: transform 1.5s cubic-bezier(0.19, 1, 0.22, 1), opacity 1.5s ease;
+    transition: transform 2s cubic-bezier(0.19, 1, 0.22, 1), opacity 2s ease; /* Increased from 1.5s to 2s */
     display: flex;
     flex-direction: column;
     justify-content: center;
+    align-items: center; /* Added to center content horizontally */
     overflow: hidden;
 }
 
@@ -538,16 +569,50 @@ nav ul li a:hover::after {
     color: var(--accent-color);
     position: relative;
     padding-bottom: 10px;
+    text-align: center; /* Added to center the heading */
+    width: 100%;
 }
 
 .about-slide h3::after {
     content: '';
     position: absolute;
     bottom: 0;
-    left: 0;
+    left: 50%; /* Changed from 0 to 50% */
+    transform: translateX(-50%); /* Added to center the line */
     width: 60px;
     height: 3px;
     background: var(--accent-color);
+}
+
+.about-slide .slide-list {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    width: 90%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    text-align: left;
+}
+
+.about-slide .slide-list li {
+    font-size: 1.1rem;
+    line-height: 1.6;
+    color: white;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+    margin-bottom: 0.7rem;
+    position: relative;
+    padding-left: 1.5rem;
+    font-weight: 300;
+    letter-spacing: 0.3px;
+}
+
+.about-slide .slide-list li::before {
+    content: '•';
+    position: absolute;
+    left: 0;
+    color: var(--accent-color);
+    font-size: 1.2rem;
 }
 
 .about-slide p {
@@ -557,6 +622,41 @@ nav ul li a:hover::after {
     text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
     font-weight: 300;
     letter-spacing: 0.3px;
+}
+
+/* Responsive adjustments for about slider */
+@media (max-width: 768px) {
+    .about-slider-container {
+        height: 400px; /* Slightly taller on medium screens */
+    }
+    
+    .about-slide {
+        padding: 25px 30px;
+    }
+    
+    .about-slide .slide-list li {
+        font-size: 1rem;
+        line-height: 1.5;
+    }
+}
+
+@media (max-width: 480px) {
+    .about-slider-container {
+        height: 450px; /* Even taller on mobile for better readability */
+    }
+    
+    .about-slide {
+        padding: 20px 25px;
+    }
+    
+    .about-slide h3 {
+        font-size: 1.5rem;
+    }
+    
+    .about-slide .slide-list li {
+        font-size: 0.95rem;
+        line-height: 1.4;
+    }
 }
 
 /* Contact Section */
@@ -640,6 +740,27 @@ nav ul li a:hover::after {
 
 .info-item p {
     color: #666;
+}
+
+.info-item a {
+    color: var(--primary-color);
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.info-item a:hover {
+    color: var(--accent-color);
+    text-decoration: underline;
+}
+
+/* Contact Form Status */
+#form-status {
+    margin-top: 15px;
+    padding: 10px;
+    font-weight: 500;
+    text-align: center;
+    border-radius: 4px;
+    transition: all 0.3s ease;
 }
 
 /* Footer */
