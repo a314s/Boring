@@ -85,7 +85,7 @@ header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 1.5rem 5%;
+    padding: 0.8rem 3%;
     background-color: rgba(255, 255, 255, 0.95);
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
     position: fixed;
@@ -97,11 +97,11 @@ header {
 }
 
 .header-scrolled {
-    padding: 0.8rem 5%;
+    padding: 0.5rem 3%;
 }
 
 .header-scrolled .logo {
-    height: 45px;
+    height: 50px;
     transition: height 0.3s ease;
 }
 
@@ -111,7 +111,7 @@ header {
 }
 
 .logo {
-    height: 65px;
+    height: 75px;
 }
 
 nav ul {
@@ -120,13 +120,17 @@ nav ul {
 }
 
 nav ul li {
-    margin-left: 2rem;
+    margin-left: 1.5rem;
 }
 
 nav ul li a {
-    font-weight: 500;
-    padding: 0.5rem 0;
+    font-weight: 600;
+    font-size: 1.1rem;
+    padding: 0.6rem 0.8rem;
     position: relative;
+    color: var(--secondary-color);
+    border-radius: 4px;
+    transition: all 0.3s ease;
 }
 
 nav ul li a::after {
@@ -138,6 +142,11 @@ nav ul li a::after {
     height: 2px;
     background-color: var(--accent-color);
     transition: width var(--transition-speed);
+}
+
+nav ul li a:hover {
+    background-color: rgba(0, 170, 255, 0.1);
+    color: var(--accent-color);
 }
 
 nav ul li a:hover::after {
@@ -199,16 +208,20 @@ nav ul li a:hover::after {
 
 /* Hero Section */
 .hero {
+    position: relative;
+    width: 100%;
+    height: 60vh;
+    min-height: 450px;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    min-height: 55vh;
-    padding: 80px 5% 50px;
+    padding: 40px 0 25px;
     background: linear-gradient(135deg, var(--secondary-color), var(--primary-color));
     color: var(--light-text);
     margin-top: 0;
     position: relative;
     overflow: hidden;
+    perspective: 1000px;
 }
 
 .hero::before {
@@ -222,11 +235,26 @@ nav ul li a:hover::after {
     z-index: 1;
 }
 
+/* Hero content (left side) */
 .hero-content {
-    max-width: 600px;
-    position: relative;
+    width: 45%;
+    padding-left: 6%;
     z-index: 2;
-    flex: 1;
+}
+
+/* Hero animation container (right side) */
+.hero-animation-container {
+    width: 26%;
+    margin-right: 6%;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    z-index: 3;
+    pointer-events: auto;
+    perspective: 1500px;
+    cursor: pointer;
 }
 
 .hero h1 {
@@ -242,16 +270,6 @@ nav ul li a:hover::after {
 }
 
 /* Hero Animation Container */
-.hero-animation-container {
-    position: relative;
-    width: 40%;
-    min-height: 300px;
-    z-index: 2;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
 .hero-animation {
     position: absolute;
     width: 100%;
@@ -282,10 +300,13 @@ nav ul li a:hover::after {
 
 .text-slider {
     position: relative;
-    width: 90%;
-    height: 350px;
-    max-width: 1000px;
+    width: 120%;
+    height: 420px;
+    max-width: 120%;
     transform-style: preserve-3d;
+    perspective: 1000px;
+    cursor: pointer;
+    margin: 0;
 }
 
 .slide {
@@ -297,19 +318,19 @@ nav ul li a:hover::after {
     background: linear-gradient(135deg, rgba(0, 0, 0, 0.8), rgba(0, 30, 60, 0.85));
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
-    border-radius: 8px;
-    border-left: 3px solid var(--accent-color);
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
-    padding: 1.5rem;
+    border-radius: 10px;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+    padding: 2rem;
     display: flex;
     flex-direction: column;
-    align-items: center;
     justify-content: center;
-    overflow: hidden;
-    pointer-events: auto;
-    transform-origin: center center -175px;
+    align-items: center;
+    z-index: 1;
+    transform-origin: center center -210px;
     transform: rotateX(90deg);
-    transition: transform 0.8s cubic-bezier(0.4, 0.0, 0.2, 1);
+    transition: transform 0.8s cubic-bezier(0.645, 0.045, 0.355, 1.000);
+    visibility: hidden;
+    transform-style: preserve-3d;
 }
 
 .slide::before {
@@ -321,12 +342,14 @@ nav ul li a:hover::after {
     height: 100%;
     background-image: linear-gradient(45deg, transparent 0%, transparent 40%, rgba(0, 170, 255, 0.1) 100%);
     z-index: -1;
+    border-radius: 10px;
 }
 
 .slide h4 {
     font-weight: 700;
     font-size: 1.4rem;
     margin-bottom: 1.5rem;
+    margin-top: 0;
     color: var(--accent-color);
     width: 100%;
     text-align: center;
@@ -353,6 +376,8 @@ nav ul li a:hover::after {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
+    margin-top: auto;
+    margin-bottom: auto;
 }
 
 .slide-list li {
@@ -381,6 +406,7 @@ nav ul li a:hover::after {
 }
 
 .slide.active {
+    visibility: visible;
     transform: rotateX(0deg);
     z-index: 2;
 }
@@ -393,8 +419,8 @@ nav ul li a:hover::after {
 @media (max-width: 768px) {
     .text-slider-container {
         perspective: 1000px;
-        width: calc(100% - 10px); /* Reduced from 20px to 10px (half the gap) */
-        margin: 0 auto; /* Center the container */
+        width: calc(100% - 10px);
+        margin: 0 auto;
     }
     
     .text-slider {
@@ -421,7 +447,7 @@ nav ul li a:hover::after {
 @media (max-width: 480px) {
     .text-slider-container {
         perspective: 800px;
-        width: calc(100% - 15px); /* Reduced from 30px to 15px (half the gap) */
+        width: calc(100% - 15px);
     }
     
     .text-slider {
@@ -588,10 +614,11 @@ nav ul li a:hover::after {
 
 .about-slider-container {
     position: relative;
-    width: 100%;
+    width: 98%;
     height: 375px;
     margin-top: 2rem;
     overflow: hidden;
+    cursor: pointer;
 }
 
 .about-slider {
@@ -628,8 +655,18 @@ nav ul li a:hover::after {
     left: 0;
     width: 100%;
     height: 100%;
-    background: linear-gradient(45deg, transparent 0%, transparent 40%, rgba(0, 170, 255, 0.1) 100%);
+    background-image: linear-gradient(45deg, transparent 0%, transparent 40%, rgba(0, 170, 255, 0.1) 100%);
     z-index: -1;
+}
+
+.about-slide.exit {
+    opacity: 0;
+    transform: translateX(-100%);
+}
+
+.about-slide.exit-reverse {
+    transform: translateX(-100%);
+    opacity: 0;
 }
 
 .about-slide.active {
@@ -637,9 +674,19 @@ nav ul li a:hover::after {
     transform: translateX(0);
 }
 
-.about-slide.exit {
-    opacity: 0;
-    transform: translateX(-100%);
+.about-slide.active-reverse {
+    animation: slideInFromLeft 2s cubic-bezier(0.19, 1, 0.22, 1) forwards;
+}
+
+@keyframes slideInFromLeft {
+    0% {
+        transform: translateX(-100%);
+        opacity: 0;
+    }
+    100% {
+        transform: translateX(0);
+        opacity: 1;
+    }
 }
 
 .about-slide h3 {
@@ -1046,4 +1093,9 @@ footer {
     .about-slide h3 {
         font-size: 1.3rem;
     }
+}
+
+/* Make sliders feel more interactive */
+.text-slider, .about-slider-container {
+    cursor: pointer;
 }

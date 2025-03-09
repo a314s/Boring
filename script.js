@@ -10,11 +10,18 @@ document.addEventListener('DOMContentLoaded', function() {
     let isAnimating = false;
     let isHeroSectionVisible = false;
     
+    // Touch and swipe variables for hero slider
+    let touchStartX = 0;
+    let touchEndX = 0;
+    let mouseStartX = 0;
+    let mouseEndX = 0;
+    let isDragging = false;
+    
     // Determine if we're on a mobile device
     const isMobile = window.innerWidth <= 480;
     
     // Animation duration based on device
-    const animationDuration = isMobile ? 600 : 800; // Faster on mobile
+    const animationDuration = isMobile ? 400 : 600; // Reduced from 600/800 to 400/600 for faster transitions
     
     // Hide all slides initially except the first one
     slides.forEach((slide, index) => {
@@ -82,6 +89,179 @@ document.addEventListener('DOMContentLoaded', function() {
         }, 6000); // Changed from 12000 to 6000 - display each slide for 6 seconds
     }
     
+    // Function to go to next slide for hero slider
+    function goToNextSlide() {
+        if (isAnimating || !isHeroSectionVisible) return;
+        
+        isAnimating = true;
+        previousSlide = currentSlide;
+        
+        // Calculate next slide index
+        currentSlide = (currentSlide + 1) % totalSlides;
+        
+        // Make sure the next slide is ready but hidden
+        slides[currentSlide].style.visibility = 'visible';
+        slides[currentSlide].style.transform = 'rotateX(90deg)';
+        
+        // Animate current slide out
+        slides[previousSlide].style.transform = 'rotateX(-90deg)';
+        
+        // After half the animation duration, start rotating the new slide in
+        setTimeout(() => {
+            slides[currentSlide].style.transform = 'rotateX(0deg)';
+        }, animationDuration / 2);
+        
+        // After animation completes, hide previous slide and reset animation flag
+        setTimeout(() => {
+            slides[previousSlide].classList.remove('active');
+            slides[previousSlide].style.visibility = 'hidden';
+            slides[currentSlide].classList.add('active');
+            isAnimating = false;
+        }, animationDuration);
+    }
+    
+    // Function to go to previous slide for hero slider
+    function goToPrevSlide() {
+        if (isAnimating || !isHeroSectionVisible) return;
+        
+        isAnimating = true;
+        previousSlide = currentSlide;
+        
+        // Calculate previous slide index
+        currentSlide = (currentSlide - 1 + totalSlides) % totalSlides;
+        
+        // Make sure the previous slide is ready but hidden
+        slides[currentSlide].style.visibility = 'visible';
+        slides[currentSlide].style.transform = 'rotateX(-90deg)';
+        
+        // Animate current slide out
+        slides[previousSlide].style.transform = 'rotateX(90deg)';
+        
+        // After half the animation duration, start rotating the new slide in
+        setTimeout(() => {
+            slides[currentSlide].style.transform = 'rotateX(0deg)';
+        }, animationDuration / 2);
+        
+        // After animation completes, hide previous slide and reset animation flag
+        setTimeout(() => {
+            slides[previousSlide].classList.remove('active');
+            slides[previousSlide].style.visibility = 'hidden';
+            slides[currentSlide].classList.add('active');
+            isAnimating = false;
+        }, animationDuration);
+    }
+
+    // Add click event for hero slider
+    slider.addEventListener('click', function(e) {
+        // Prevent click from triggering if we're dragging
+        if (isDragging) {
+            isDragging = false;
+            return;
+        }
+        
+        // Reset the interval to prevent immediate auto-advance
+        if (sliderInterval) {
+            clearInterval(sliderInterval);
+            startSlider();
+        }
+        
+        goToNextSlide();
+    });
+    
+    // Add click event for the entire hero-animation-container
+    const heroAnimationContainer = document.querySelector('.hero-animation-container');
+    if (heroAnimationContainer) {
+        heroAnimationContainer.addEventListener('click', function(e) {
+            // Don't propagate the click to avoid double triggering with the slider click
+            e.stopPropagation();
+            
+            // Don't trigger if we're already animating or if the hero section isn't visible
+            if (isAnimating || !isHeroSectionVisible) return;
+            
+            // Reset the interval to prevent immediate auto-advance
+            if (sliderInterval) {
+                clearInterval(sliderInterval);
+                startSlider();
+            }
+            
+            goToNextSlide();
+        });
+        
+        // Make the container clickable by removing pointer-events: none
+        heroAnimationContainer.style.pointerEvents = 'auto';
+    }
+    
+    // Touch events for hero slider
+    slider.addEventListener('touchstart', function(e) {
+        touchStartX = e.changedTouches[0].screenX;
+    }, { passive: true });
+    
+    slider.addEventListener('touchend', function(e) {
+        touchEndX = e.changedTouches[0].screenX;
+        handleSwipe();
+    }, { passive: true });
+    
+    // Mouse events for hero slider (for drag/swipe with mouse)
+    slider.addEventListener('mousedown', function(e) {
+        mouseStartX = e.clientX;
+        isDragging = false;
+    });
+    
+    slider.addEventListener('mousemove', function(e) {
+        if (e.buttons === 1) { // Left mouse button is pressed
+            isDragging = true;
+        }
+    });
+    
+    slider.addEventListener('mouseup', function(e) {
+        if (isDragging) {
+            mouseEndX = e.clientX;
+            handleMouseSwipe();
+        }
+    });
+    
+    // Handle touch swipe
+    function handleSwipe() {
+        const swipeThreshold = 50; // Minimum distance required for a swipe
+        const swipeDistance = touchEndX - touchStartX;
+        
+        // Reset the interval to prevent immediate auto-advance
+        if (sliderInterval) {
+            clearInterval(sliderInterval);
+            startSlider();
+        }
+        
+        if (swipeDistance > swipeThreshold) {
+            // Swiped right - go to previous slide
+            goToPrevSlide();
+        } else if (swipeDistance < -swipeThreshold) {
+            // Swiped left - go to next slide
+            goToNextSlide();
+        }
+    }
+    
+    // Handle mouse swipe
+    function handleMouseSwipe() {
+        const swipeThreshold = 50; // Minimum distance required for a swipe
+        const swipeDistance = mouseEndX - mouseStartX;
+        
+        // Reset the interval to prevent immediate auto-advance
+        if (sliderInterval) {
+            clearInterval(sliderInterval);
+            startSlider();
+        }
+        
+        if (swipeDistance > swipeThreshold) {
+            // Swiped right - go to previous slide
+            goToPrevSlide();
+        } else if (swipeDistance < -swipeThreshold) {
+            // Swiped left - go to next slide
+            goToNextSlide();
+        }
+        
+        isDragging = false;
+    }
+    
     // About section slider functionality
     const aboutSlides = document.querySelectorAll('.about-slide');
     let currentAboutSlide = 0;
@@ -89,6 +269,13 @@ document.addEventListener('DOMContentLoaded', function() {
     const totalAboutSlides = aboutSlides.length;
     let aboutSliderInterval;
     let isAboutSectionVisible = false;
+    
+    // Touch and swipe variables for about slider
+    let aboutTouchStartX = 0;
+    let aboutTouchEndX = 0;
+    let aboutMouseStartX = 0;
+    let aboutMouseEndX = 0;
+    let isAboutDragging = false;
     
     // Set initial about slide
     aboutSlides[currentAboutSlide].classList.add('active');
@@ -121,6 +308,149 @@ document.addEventListener('DOMContentLoaded', function() {
                 aboutSlides[previousAboutSlide].classList.remove('exit');
             }, 2000); // Increased from 1500ms to 2000ms to match the new CSS transition time
         }, 6000); // Changed from 12000 to 6000 - display each slide for 6 seconds
+    }
+    
+    // Function to go to next slide for about slider
+    function goToNextAboutSlide() {
+        if (!isAboutSectionVisible) return;
+        
+        // Store previous slide index
+        previousAboutSlide = currentAboutSlide;
+        
+        // Move to next slide or back to first
+        currentAboutSlide = (currentAboutSlide + 1) % totalAboutSlides;
+        
+        // Remove any existing animation classes first
+        aboutSlides.forEach(slide => {
+            slide.classList.remove('exit-reverse', 'active-reverse');
+        });
+        
+        // Add exit class to the previous slide
+        aboutSlides[previousAboutSlide].classList.remove('active');
+        aboutSlides[previousAboutSlide].classList.add('exit');
+        
+        // Add active class to new current slide
+        aboutSlides[currentAboutSlide].classList.add('active');
+        
+        // Remove exit class after animation completes
+        setTimeout(() => {
+            aboutSlides[previousAboutSlide].classList.remove('exit');
+        }, 2000);
+        
+        // Reset the interval to prevent immediate auto-advance
+        if (aboutSliderInterval) {
+            clearInterval(aboutSliderInterval);
+            startAboutSlider();
+        }
+    }
+    
+    // Function to go to previous slide for about slider
+    function goToPrevAboutSlide() {
+        if (!isAboutSectionVisible) return;
+        
+        // Store previous slide index
+        previousAboutSlide = currentAboutSlide;
+        
+        // Move to previous slide or to last
+        currentAboutSlide = (currentAboutSlide - 1 + totalAboutSlides) % totalAboutSlides;
+        
+        // Remove any existing animation classes first
+        aboutSlides.forEach(slide => {
+            slide.classList.remove('exit', 'exit-reverse', 'active-reverse');
+        });
+        
+        // Add exit-reverse class to the previous slide for reverse animation
+        aboutSlides[previousAboutSlide].classList.remove('active');
+        aboutSlides[previousAboutSlide].classList.add('exit-reverse');
+        
+        // Add active class to new current slide with reverse entry
+        aboutSlides[currentAboutSlide].classList.add('active-reverse');
+        aboutSlides[currentAboutSlide].classList.add('active');
+        
+        // Remove classes after animation completes
+        setTimeout(() => {
+            aboutSlides[previousAboutSlide].classList.remove('exit-reverse');
+            aboutSlides[currentAboutSlide].classList.remove('active-reverse');
+        }, 2000);
+        
+        // Reset the interval to prevent immediate auto-advance
+        if (aboutSliderInterval) {
+            clearInterval(aboutSliderInterval);
+            startAboutSlider();
+        }
+    }
+    
+    // Get the about slider container
+    const aboutSliderContainer = document.querySelector('.about-slider-container');
+    
+    // Add click event for about slider
+    aboutSliderContainer.addEventListener('click', function(e) {
+        // Prevent click from triggering if we're dragging
+        if (isAboutDragging) {
+            isAboutDragging = false;
+            return;
+        }
+        
+        goToNextAboutSlide();
+    });
+    
+    // Touch events for about slider
+    aboutSliderContainer.addEventListener('touchstart', function(e) {
+        aboutTouchStartX = e.changedTouches[0].screenX;
+    }, { passive: true });
+    
+    aboutSliderContainer.addEventListener('touchend', function(e) {
+        aboutTouchEndX = e.changedTouches[0].screenX;
+        handleAboutSwipe();
+    }, { passive: true });
+    
+    // Mouse events for about slider (for drag/swipe with mouse)
+    aboutSliderContainer.addEventListener('mousedown', function(e) {
+        aboutMouseStartX = e.clientX;
+        isAboutDragging = false;
+    });
+    
+    aboutSliderContainer.addEventListener('mousemove', function(e) {
+        if (e.buttons === 1) { // Left mouse button is pressed
+            isAboutDragging = true;
+        }
+    });
+    
+    aboutSliderContainer.addEventListener('mouseup', function(e) {
+        if (isAboutDragging) {
+            aboutMouseEndX = e.clientX;
+            handleAboutMouseSwipe();
+        }
+    });
+    
+    // Handle touch swipe for about slider
+    function handleAboutSwipe() {
+        const swipeThreshold = 50; // Minimum distance required for a swipe
+        const swipeDistance = aboutTouchEndX - aboutTouchStartX;
+        
+        if (swipeDistance > swipeThreshold) {
+            // Swiped right - go to previous slide
+            goToPrevAboutSlide();
+        } else if (swipeDistance < -swipeThreshold) {
+            // Swiped left - go to next slide
+            goToNextAboutSlide();
+        }
+    }
+    
+    // Handle mouse swipe for about slider
+    function handleAboutMouseSwipe() {
+        const swipeThreshold = 50; // Minimum distance required for a swipe
+        const swipeDistance = aboutMouseEndX - aboutMouseStartX;
+        
+        if (swipeDistance > swipeThreshold) {
+            // Swiped right - go to previous slide
+            goToPrevAboutSlide();
+        } else if (swipeDistance < -swipeThreshold) {
+            // Swiped left - go to next slide
+            goToNextAboutSlide();
+        }
+        
+        isAboutDragging = false;
     }
     
     // Set up Intersection Observer for hero section
@@ -174,18 +504,15 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     
     // Pause about slider on hover
-    const aboutSliderContainer = document.querySelector('.about-slider-container');
-    if (aboutSliderContainer) {
-        aboutSliderContainer.addEventListener('mouseenter', () => {
-            clearInterval(aboutSliderInterval);
-        });
-        
-        aboutSliderContainer.addEventListener('mouseleave', () => {
-            if (isAboutSectionVisible) {
-                startAboutSlider();
-            }
-        });
-    }
+    aboutSliderContainer.addEventListener('mouseenter', () => {
+        clearInterval(aboutSliderInterval);
+    });
+    
+    aboutSliderContainer.addEventListener('mouseleave', () => {
+        if (isAboutSectionVisible) {
+            startAboutSlider();
+        }
+    });
     
     // Language translations
     const translations = {
