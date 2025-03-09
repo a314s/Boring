@@ -83,6 +83,7 @@ img {
 /* Header */
 header {
     display: flex;
+    flex-direction: row;
     justify-content: space-between;
     align-items: center;
     padding: 0.8rem 3%;
@@ -114,9 +115,15 @@ header {
     height: 75px;
 }
 
+nav {
+    display: flex;
+    align-items: center;
+}
+
 nav ul {
     display: flex;
     list-style: none;
+    justify-content: flex-end;
 }
 
 nav ul li {
