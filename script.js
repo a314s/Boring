@@ -1,38 +1,72 @@
 document.addEventListener('DOMContentLoaded', function() {
-    // Text slider functionality
+    // Text slider functionality with 3D cube flip
     const slides = document.querySelectorAll('.slide');
+    const slider = document.querySelector('.text-slider');
     let currentSlide = 0;
+    let previousSlide = 0;
     const totalSlides = slides.length;
     let sliderInterval;
     let pauseOnLastSlide = false;
+    let isAnimating = false;
+    
+    // Hide all slides initially except the first one
+    slides.forEach((slide, index) => {
+        if (index !== 0) {
+            slide.style.visibility = 'hidden';
+        }
+    });
+    
+    // Set initial slide
+    slides[currentSlide].classList.add('active');
+    slides[currentSlide].style.visibility = 'visible';
     
     function startSlider() {
         sliderInterval = setInterval(() => {
+            // Don't start a new animation if one is already in progress
+            if (isAnimating) return;
+            
             // If we're on the last slide and it's set to pause
             if (currentSlide === totalSlides - 1 && pauseOnLastSlide) {
                 // Don't advance, just keep showing the last slide
                 return;
             }
             
-            // Remove active class from current slide
-            slides[currentSlide].classList.remove('active');
+            isAnimating = true;
             
-            // Move to next slide or back to first
+            // Store previous slide index
+            previousSlide = currentSlide;
+            
+            // Make sure the next slide is ready but hidden
             currentSlide = (currentSlide + 1) % totalSlides;
+            slides[currentSlide].style.visibility = 'visible';
+            
+            // Add prev class to the current slide (which will become the previous)
+            slides[previousSlide].classList.remove('active');
+            slides[previousSlide].classList.add('prev');
             
             // Add active class to new current slide
             slides[currentSlide].classList.add('active');
             
-            // If we've reached the last slide (Why choose NaviTechAid)
-            if (currentSlide === totalSlides - 1) {
-                // Pause on this slide for longer (10 seconds)
-                pauseOnLastSlide = true;
+            // After animation completes, clean up and prepare for next animation
+            setTimeout(() => {
+                // Hide the previous slide
+                slides[previousSlide].style.visibility = 'hidden';
+                slides[previousSlide].classList.remove('prev');
                 
-                // After 10 seconds, allow the slider to continue
-                setTimeout(() => {
-                    pauseOnLastSlide = false;
-                }, 10000);
-            }
+                // Animation is complete
+                isAnimating = false;
+                
+                // If we've reached the last slide (Why choose NaviTechAid)
+                if (currentSlide === totalSlides - 1) {
+                    // Pause on this slide for longer (10 seconds)
+                    pauseOnLastSlide = true;
+                    
+                    // After 10 seconds, allow the slider to continue
+                    setTimeout(() => {
+                        pauseOnLastSlide = false;
+                    }, 10000);
+                }
+            }, 800); // Match this to the CSS transition duration
         }, 8000); // Change slide every 8 seconds
     }
     
@@ -48,6 +82,53 @@ document.addEventListener('DOMContentLoaded', function() {
         
         sliderContainer.addEventListener('mouseleave', () => {
             startSlider();
+        });
+    }
+
+    // About section slider functionality
+    const aboutSlides = document.querySelectorAll('.about-slide');
+    let currentAboutSlide = 0;
+    let previousAboutSlide = 0;
+    const totalAboutSlides = aboutSlides.length;
+    let aboutSliderInterval;
+    
+    // Set initial about slide
+    aboutSlides[currentAboutSlide].classList.add('active');
+    
+    function startAboutSlider() {
+        aboutSliderInterval = setInterval(() => {
+            // Store previous slide index
+            previousAboutSlide = currentAboutSlide;
+            
+            // Move to next slide or back to first
+            currentAboutSlide = (currentAboutSlide + 1) % totalAboutSlides;
+            
+            // Add exit class to the previous slide
+            aboutSlides[previousAboutSlide].classList.remove('active');
+            aboutSlides[previousAboutSlide].classList.add('exit');
+            
+            // Add active class to new current slide
+            aboutSlides[currentAboutSlide].classList.add('active');
+            
+            // Remove exit class after animation completes
+            setTimeout(() => {
+                aboutSlides[previousAboutSlide].classList.remove('exit');
+            }, 1500);
+        }, 9000); // Change slide every 9 seconds (slightly different timing from hero slider)
+    }
+    
+    // Start the about slider
+    startAboutSlider();
+    
+    // Pause about slider on hover
+    const aboutSliderContainer = document.querySelector('.about-slider-container');
+    if (aboutSliderContainer) {
+        aboutSliderContainer.addEventListener('mouseenter', () => {
+            clearInterval(aboutSliderInterval);
+        });
+        
+        aboutSliderContainer.addEventListener('mouseleave', () => {
+            startAboutSlider();
         });
     }
 
